@@ -42,7 +42,7 @@
 				<div class="row">
 					<div class="col-md-4 col-sm-4 col-7 col-lg-2">
 						<div class="logo">
-							<a href="index.html">
+							<a href="{% url 'Reading:home' %}">
 								<img src="{% static 'Reading/images/logo/logo.png' %}" alt="logo images">
 							</a>
 						</div>
@@ -50,7 +50,7 @@
 					<div class="col-lg-8 d-none d-lg-block">
 						<nav class="mainmenu__nav">
 							<ul class="meninmenu d-flex justify-content-start">
-								<li class="drop with--one--item"><a href="index.html">Home</a></li>
+								<li class="drop with--one--item"><a href="{% url 'Reading:home' %}">Home</a></li>
 								<li class="drop"><a href="#">Shop</a>
 									<div class="megamenu mega03">
 										<ul class="item item03">
@@ -396,24 +396,11 @@
         			<div class="col-lg-3 col-12 order-2 order-lg-1 md-mt-40 sm-mt-40">
         				<div class="shop__sidebar">
         					<aside class="wedget__categories poroduct--cat">
-        						<h3 class="wedget__title">Product Categories</h3>
+        						<h3 class="wedget__title">Categories</h3>
         						<ul>
-        							<li><a href="#">Biography <span>(3)</span></a></li>
-        							<li><a href="#">Business <span>(4)</span></a></li>
-        							<li><a href="#">Cookbooks <span>(6)</span></a></li>
-        							<li><a href="#">Health & Fitness <span>(7)</span></a></li>
-        							<li><a href="#">History <span>(8)</span></a></li>
-        							<li><a href="#">Mystery <span>(9)</span></a></li>
-        							<li><a href="#">Inspiration <span>(13)</span></a></li>
-        							<li><a href="#">Romance <span>(20)</span></a></li>
-        							<li><a href="#">Fiction/Fantasy <span>(22)</span></a></li>
-        							<li><a href="#">Self-Improvement <span>(13)</span></a></li>
-        							<li><a href="#">Humor Books <span>(17)</span></a></li>
-        							<li><a href="#">Harry Potter <span>(20)</span></a></li>
-        							<li><a href="#">Land of Stories <span>(34)</span></a></li>
-        							<li><a href="#">Kids' Music <span>(60)</span></a></li>
-        							<li><a href="#">Toys & Games <span>(3)</span></a></li>
-        							<li><a href="#">hoodies <span>(3)</span></a></li>
+                                    {% for category in categories %}
+        							<li><a href="{% url 'Reading:books_by_category' category.id %}" id="{{ category.id }}">{{ category.title }} <span>{{ category.books }}</span></a></li>
+                                    {% endfor %}
         						</ul>
         					</aside>
         					<aside class="wedget__categories pro--range">
@@ -734,6 +721,7 @@
 		<script src="{% static 'Reading/js/bootstrap.min.js' %}"></script>
 		<script src="{% static 'Reading/js/plugins.js' %}"></script>
 		<script src="{% static 'Reading/js/active.js' %}"></script>
+        <script src="{% static 'Reading/js/books_ajax.js' %}"></script>
 		
 	</body>
 	</html>

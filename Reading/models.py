@@ -9,12 +9,23 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+class Category(models.Model):
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.title
+
+    def books(self):
+        count = Book.objects.filter(category=self).count()
+        return count
+
 class Book(models.Model):
     name = models.CharField(max_length=500)
-    author = models.ManyToManyField(Author)
+    author = models.ManyToManyField(Author, related_name='author')
     image = models.URLField(default='https://i.ibb.co/R4yFs3K/blank-book-cover-template-with-pages-front-side-standing-47649-397.jpg')
     summary = models.TextField(null=True, blank=True)
     rating = models.FloatField(default=0.0)
+    category = models.ManyToManyField(Category, related_name='category')
 
     def __str__(self):
         return self.name

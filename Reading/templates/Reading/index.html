@@ -20,7 +20,7 @@
 	<!-- Stylesheets -->
 	<link rel="stylesheet" href="{% static 'Reading/css/bootstrap.min.css' %}">
 	<link rel="stylesheet" href="{% static 'Reading/css/plugins.css' %}">
-	<link rel="stylesheet" href="{% static 'Reading/style.css' %}">
+	<link rel="stylesheet" href="{% static 'Reading/css/style.css' %}">
 
 	<!-- Cusom css -->
    <link rel="stylesheet" href="{% static 'Reading/css/custom.css' %}">
@@ -41,7 +41,7 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
 						<div class="logo">
-							<a href="index.html">
+							<a href="{% url 'Reading:home' %}">
 								<img src="{% static 'Reading/images/logo/logo.png' %}" alt="logo images">
 							</a>
 						</div>
@@ -49,7 +49,7 @@
 					<div class="col-lg-8 d-none d-lg-block">
 						<nav class="mainmenu__nav">
 							<ul class="meninmenu d-flex justify-content-start">
-								<li class="drop with--one--item"><a href="index.html">Home</a></li>
+								<li class="drop with--one--item"><a href="{% url 'Reading:home' %}">Home</a></li>
 								<li class="drop"><a href="#">Shop</a>
 									<div class="megamenu mega03">
 										<ul class="item item03">
@@ -76,32 +76,34 @@
 										</ul>
 									</div>
 								</li>
-								<li class="drop"><a href="shop-grid.html">Books</a>
+								<li class="drop"><a href="{% url 'Reading:books' %}">Books</a>
 									<div class="megamenu mega03">
 										<ul class="item item03">
 											<li class="title">Categories</li>
-											<li><a href="shop-grid.html">Biography </a></li>
-											<li><a href="shop-grid.html">Business </a></li>
-											<li><a href="shop-grid.html">Cookbooks </a></li>
-											<li><a href="shop-grid.html">Health & Fitness </a></li>
-											<li><a href="shop-grid.html">History </a></li>
+                                            {% for category in categories %}
+                                                {% if forloop.counter < 6 %}
+											<li><a href="{% url 'Reading:books_by_category' category.id %}">{{ category.title }} </a></li>
+                                                {% endif %}
+                                            {% endfor %}
 										</ul>
+                                    {% if categories|length > 5 %}
 										<ul class="item item03">
-											<li class="title">Customer Favourite</li>
-											<li><a href="shop-grid.html">Mystery</a></li>
-											<li><a href="shop-grid.html">Religion & Inspiration</a></li>
-											<li><a href="shop-grid.html">Romance</a></li>
-											<li><a href="shop-grid.html">Fiction/Fantasy</a></li>
-											<li><a href="shop-grid.html">Sleeveless</a></li>
-										</ul>
+                                            {% for category in categories %}
+                                                {% if forloop.counter > 6 and forloop.counter < 11 %}
+											<li><a href="{% url 'Reading:books_by_category' category.id %}">{{ category.title }} </a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                    {% if categories|length > 10 %}
 										<ul class="item item03">
-											<li class="title">Collections</li>
-											<li><a href="shop-grid.html">Science </a></li>
-											<li><a href="shop-grid.html">Fiction/Fantasy</a></li>
-											<li><a href="shop-grid.html">Self-Improvemen</a></li>
-											<li><a href="shop-grid.html">Home & Garden</a></li>
-											<li><a href="shop-grid.html">Humor Books</a></li>
+                                            {% for category in categories %}
+                                                {% if forloop.counter > 11 and forloop.counter < 16 %}
+											<li><a href="{% url 'Reading:books_by_category' category.id %}">{{ category.title }} </a></li>
+                                                {% endif %}
+                                            {% endfor %}
 										</ul>
+                                    {% endif %}
 									</div>
 								</li>
 								<li class="drop"><a href="shop-grid.html">Kids</a>

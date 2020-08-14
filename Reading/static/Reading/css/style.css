@@ -2045,7 +2045,7 @@ Header Styles
 
 /* Header Style Four*/
 .header__absolute {
-  background: #1a1a1a;
+  /*background: #1a1a1a;*/
   left: 0;
   position: absolute;
   right: 0;
