@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+	<title>Login V1</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+<!--===============================================================================================-->	
+	<link rel="icon" type="image/png" href="{% static 'login/images/icons/favicon.ico' %}"/>
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/bootstrap/css/bootstrap.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/animate/animate.css' %}">
+<!--===============================================================================================-->	
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/css-hamburgers/hamburgers.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/vendor/select2/select2.min.css' %}">
+<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/util.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'login/css/main.css' %}">
+<!--===============================================================================================-->
+</head>
+<body>
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100">
+				<div class="login100-pic js-tilt" data-tilt>
+					<img src="{% static 'login/images/img-01.png' %}" alt="IMG">
+				</div>
+
+				<form class="login100-form validate-form" id="login-form" method="post">
+                    {% csrf_token %}
+					<span class="login100-form-title">
+						Login
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" id="email-field" name="email" placeholder="Email">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div>
+
+                    <div class="alert" id="login-alert" style="display: none;">
+
+                    </div>
+
+					<div class="wrap-input100 validate-input" data-validate = "Password is required">
+						<input class="input100" type="password" name="pass" placeholder="Password">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div>
+					
+					<div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit" id="login-btn">
+							Login
+						</button>
+					</div>
+
+
+{##}
+{#					<div class="text-center p-t-12">#}
+{#						<span class="txt1">#}
+{#							Forgot#}
+{#						</span>#}
+{#						<a class="txt2" href="#">#}
+{#							Username / Password?#}
+{#						</a>#}
+{#					</div>#}
+
+					<div class="text-center p-t-136">
+						<a class="txt2" href="#" onclick="change()" id="sign-up">
+							Create an Account
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div>
+				</form>
+
+                <form class="login100-form validate-form" id="signup-form" method="post" style="display: none;"><span class="login100-form-title">
+						Sign Up
+					</span><div class="wrap-input100 validate-input" data-validate="Name is required">
+						<input class="input100" type="text" id="text-field" name="name" placeholder="Name">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-pencil" aria-hidden="true"></i>
+						</span>
+					</div><div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" id="username-field" name="username" placeholder="Username">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-user" aria-hidden="true"></i>
+						</span>
+					</div><div class="alert" id="username-alert" style="display: none;">
+
+ </div><div class="wrap-input100 validate-input" data-validate="Valid email is required: ex@abc.xyz">
+						<input class="input100" type="text" id="email-signup-field" name="email" placeholder="Email">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-envelope" aria-hidden="true"></i>
+						</span>
+					</div><div class="alert" id="email-alert" style="display: none;">
+
+ </div><div class="wrap-input100 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="pass" placeholder="Password">
+						<span class="focus-input100"></span>
+						<span class="symbol-input100">
+							<i class="fa fa-lock" aria-hidden="true"></i>
+						</span>
+					</div><div class="text-center p-t-136">
+Already an user?						<a class="txt2" href="#" onclick="change()" id="sign-up">
+							Login
+							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+						</a>
+					</div><div class="container-login100-form-btn">
+						<button class="login100-form-btn" type="submit" id="signup-btn">
+							Sign Up
+						</button>
+					</div><div class="alert alert-success" id="success-alert" style="display: none;">
+
+ </div></form>
+
+			</div>
+		</div>
+	</div>
+	
+	
+
+	
+<!--===============================================================================================-->	
+	<script src="{% static 'login/vendor/jquery/jquery-3.2.1.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/bootstrap/js/popper.js' %}"></script>
+	<script src="{% static 'login/vendor/bootstrap/js/bootstrap.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/select2/select2.min.js' %}"></script>
+<!--===============================================================================================-->
+	<script src="{% static 'login/vendor/tilt/tilt.jquery.min.js' %}"></script>
+	<script >
+		$('.js-tilt').tilt({
+			scale: 1.1
+		})
+	</script>
+<!--===============================================================================================-->
+	<script src="{% static 'login/js/main.js' %}"></script>
+    <script>
+        $('#email-field').focusout(function (e) {
+            e.preventDefault();
+            let data = $('#email-field').val();
+            serialized = {email: data};
+            console.log(serialized);
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'Reading:check-user' %}",
+                data: serialized,
+                dataType: 'json',
+                success: function (response) {
+                    let msg = response["msg"];
+                    console.log(msg);
+                    if (msg == 'found') {
+                        $('#login-alert').css('display', 'none');
+                    }
+                    else {
+                        $('#login-alert').addClass('alert-danger');
+                        $('#login-alert').css('display', 'block');
+                        $('#login-alert').html(msg);
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        $('#login-form').submit(function (e) {
+            e.preventDefault();
+            let serialized = $(this).serialize();
+            console.log(serialized)
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'login' %}",
+                data: serialized,
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                success: function (response) {
+                    let msg = response["msg"];
+                    console.log(msg);
+                    if (msg == 'Success') {
+                        window.location.href = {% url 'user_profile' %};
+                    }
+                    $('#login-alert').addClass('alert-danger');
+                    $('#login-alert').html(msg)
+                }
+            })
+        })
+    </script>
+    <script>
+        function change () {
+           if ($('#login-form').css('display') == 'block') {
+                $('#login-form').css('display', 'none');
+                $('#signup-form').css('display', 'block');
+           }
+           else {
+               $('#login-form').css('display', 'block');
+                $('#signup-form').css('display', 'none');
+           }
+        }
+    </script>
+{#    <script>#}
+{#        $('#log-in').click(function () {#}
+{#            #}
+{#        })#}
+{#    </script>#}
+    <script>
+        $('#email-signup-field').focusout(function (e) {
+            e.preventDefault();
+            let data = $('#email-signup-field').val();
+            serialized = {email: data};
+            console.log(serialized);
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'check-email' %}",
+                data: serialized,
+                dataType: 'json',
+                success: function (response) {
+                    let msg = response["msg"];
+                    console.log(msg);
+                    if (msg == 'ok') {
+                        $('#email-alert').css('display', 'none');
+                    }
+                    else {
+                        $('#email-alert').addClass('alert-danger');
+                        $('#email-alert').css('display', 'block');
+                        $('#email-alert').html(msg);
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        $('#username-field').focusout(function (e) {
+            e.preventDefault();
+            let data = $('#username-field').val();
+            serialized = {username: data};
+            console.log(serialized);
+            $.ajax({
+                type: 'GET',
+                url: "{% url 'check-username' %}",
+                data: serialized,
+                dataType: 'json',
+                success: function (response) {
+                    let msg = response["msg"];
+                    console.log(msg);
+                    if (msg == 'ok') {
+                        $('#username-alert').css('display', 'none');
+                    }
+                    else {
+                        $('#username-alert').addClass('alert-danger');
+                        $('#username-alert').css('display', 'block');
+                        $('#username-alert').html(msg);
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        $('#signup-form').submit(function (e) {
+            e.preventDefault();
+            let serialized = $(this).serialize();
+            console.log(serialized)
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'signup' %}",
+                data: serialized,
+                headers: {'X-CSRFToken': '{{ csrf_token }}'},
+                success: function (response) {
+                    let msg = response["msg"];
+                    console.log(msg);
+                    if (msg == 'User successfully created!') {
+                        $('#success-alert').html(msg);
+                        $('#success-alert').css('display', 'block');
+                    }
+
+                }
+            })
+        })
+    </script>
+
+
+</body>
+</html>

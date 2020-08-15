@@ -27,50 +27,17 @@
 				<div class="row">
 					<div class="col-lg-6 col-12">
 						<div class="my__account__wrapper">
-							<h3 class="account__title">Login</h3>
-							<form action="#">
-								<div class="account__form">
-									<div class="input__box">
-										<label>Username or email address <span>*</span></label>
-										<input type="text">
-									</div>
-									<div class="input__box">
-										<label>Password<span>*</span></label>
-										<input type="text">
-									</div>
-									<div class="form__btn">
-										<button>Login</button>
-										<label class="label-for-checkbox">
-											<input id="rememberme" class="input-checkbox" name="rememberme" value="forever" type="checkbox">
-											<span>Remember me</span>
-										</label>
-									</div>
-									<a class="forget_pass" href="#">Lost your password?</a>
-								</div>
-							</form>
+							<h3 class="account__title">{{ profile.name }}</h3> <br><br>
+							<h4> <strong>Email:</strong> {{ profile.email }}</h4> <br>
+                            <h5>Books Read</h5>
+                            <ul>
+                                {% for book in profile.books.all %}
+                                    <li>{{ book.name }}</li> <br>
+                                {% endfor %}
+                            </ul>
 						</div>
 					</div>
-					<div class="col-lg-6 col-12">
-						<div class="my__account__wrapper">
-							<h3 class="account__title">Register</h3>
-							<form action="#">
-								<div class="account__form">
-									<div class="input__box">
-										<label>Email address <span>*</span></label>
-										<input type="email">
-									</div>
-									<div class="input__box">
-										<label>Password<span>*</span></label>
-										<input type="password">
-									</div>
-									<div class="form__btn">
-										<button>Register</button>
-									</div>
-								</div>
-							</form>
-						</div>
-					</div>
-				</div>
+                </div>
 			</div>
 		</section>
 		<!-- End My Account Area -->

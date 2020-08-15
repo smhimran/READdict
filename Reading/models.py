@@ -34,6 +34,7 @@ class Book(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
+    email = models.EmailField(unique=True, null=True)
     books = models.ManyToManyField(Book, through='Read')
 
     def __str__(self):

@@ -8,11 +8,11 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="bradcaump__inner text-center">
-                        	<h2 class="bradcaump-title">Shop Grid</h2>
+                        	<h2 class="bradcaump-title">Books</h2>
                             <nav class="bradcaump-content">
                               <a class="breadcrumb_item" href="index.html">Home</a>
                               <span class="brd-separetor">/</span>
-                              <span class="breadcrumb_item active">Shop Grid</span>
+                              <span class="breadcrumb_item active">Books</span>
                             </nav>
                         </div>
                     </div>
@@ -34,51 +34,7 @@
                                     {% endfor %}
         						</ul>
         					</aside>
-        					<aside class="wedget__categories pro--range">
-        						<h3 class="wedget__title">Filter by price</h3>
-        						<div class="content-shopby">
-        						    <div class="price_filter s-filter clear">
-        						        <form action="#" method="GET">
-        						            <div id="slider-range"></div>
-        						            <div class="slider__range--output">
-        						                <div class="price__output--wrap">
-        						                    <div class="price--output">
-        						                        <span>Price :</span><input type="text" id="amount" readonly="">
-        						                    </div>
-        						                    <div class="price--filter">
-        						                        <a href="#">Filter</a>
-        						                    </div>
-        						                </div>
-        						            </div>
-        						        </form>
-        						    </div>
-        						</div>
-        					</aside>
-        					<aside class="wedget__categories poroduct--tag">
-        						<h3 class="wedget__title">Product Tags</h3>
-        						<ul>
-        							<li><a href="#">Biography</a></li>
-        							<li><a href="#">Business</a></li>
-        							<li><a href="#">Cookbooks</a></li>
-        							<li><a href="#">Health & Fitness</a></li>
-        							<li><a href="#">History</a></li>
-        							<li><a href="#">Mystery</a></li>
-        							<li><a href="#">Inspiration</a></li>
-        							<li><a href="#">Religion</a></li>
-        							<li><a href="#">Fiction</a></li>
-        							<li><a href="#">Fantasy</a></li>
-        							<li><a href="#">Music</a></li>
-        							<li><a href="#">Toys</a></li>
-        							<li><a href="#">Hoodies</a></li>
-        						</ul>
-        					</aside>
-        					<aside class="wedget__categories sidebar--banner">
-								<img src="{% static 'Reading/images/others/banner_left.jpg' %}" alt="banner images">
-								<div class="text">
-									<h2>new products</h2>
-									<h6>save up to <br> <strong>40%</strong>off</h6>
-								</div>
-        					</aside>
+
         				</div>
         			</div>
         			<div class="col-lg-9 col-12 order-1 order-lg-2">
@@ -89,18 +45,8 @@
 			                            <a class="nav-item nav-link active" data-toggle="tab" href="#nav-grid" role="tab"><i class="fa fa-th"></i></a>
 			                            <a class="nav-item nav-link" data-toggle="tab" href="#nav-list" role="tab"><i class="fa fa-list"></i></a>
 			                        </div>
-			                        <p>Showing 1–12 of 40 results</p>
-			                        <div class="orderby__wrapper">
-			                        	<span>Sort By</span>
-			                        	<select class="shot__byselect">
-			                        		<option>Default sorting</option>
-			                        		<option>HeadPhone</option>
-			                        		<option>Furniture</option>
-			                        		<option>Jewellery</option>
-			                        		<option>Handmade</option>
-			                        		<option>Kids</option>
-			                        	</select>
-			                        </div>
+{#			                        <p>Showing 1–12 of 40 results</p>#}
+
 		                        </div>
         					</div>
         				</div>
@@ -111,8 +57,7 @@
 	        						<!-- Start Single Product -->
 		        					<div class="product product__style--3 col-lg-4 col-md-4 col-sm-6 col-12">
 			        					<div class="product__thumb">
-											<a class="first__img" href="single-product.html"><img src="{{ book.image }}" alt="product image" height="340" width="270"></a>
-											<a class="second__img animation1" href="single-product.html"><img src="{{ book.image }}" alt="product image"></a>
+											<a class="first__img" href="{% url 'Reading:single_book' book.id %}"><img src="{{ book.image }}" alt="product image" height="340" width="270"></a>
 											<div class="hot__box">
 												<span class="hot-label">BEST SALLER</span>
 											</div>
@@ -164,11 +109,10 @@
                                     {% for book in books %}
 	        						<div class="list__view" style="padding-bottom: 20px">
 	        							<div class="thumb">
-	        								<a class="first__img" href="single-product.html"><img src="{{ book.image }}" alt="product images" height="340" width="270"></a>
-	        								<a class="second__img animation1" href="single-product.html"><img src="{{ book.image }}" alt="product images"></a>
+	        								<a class="first__img" href="{% url 'Reading:single_book' book.id %}"><img src="{{ book.image }}" alt="product images" height="340" width="270"></a>
 	        							</div>
 	        							<div class="content">
-	        								<h2><a href="single-product.html">{{ book.name }}</a></h2>
+	        								<h2><a href="{% url 'Reading:single_book' book.id %}">{{ book.name }}</a></h2>
 	        								<ul class="rating d-flex">
 	        									<li class="on"><i class="fa fa-star-o"></i></li>
 	        									<li class="on"><i class="fa fa-star-o"></i></li>
@@ -187,7 +131,7 @@
 	        								</ul>
 	        								<p>{{ book.summary }}</p>
 	        								<ul class="cart__action d-flex">
-	        									<li class="cart"><a href="cart.html">Start Reading</a></li>
+	        									<li class="cart"><a href="{% url 'Reading:single_book' book.id %}">View Details</a></li>
 	        									<li class="wishlist"><a href="cart.html"></a></li>
 	        									<li class="compare"><a href="cart.html"></a></li>
 	        								</ul>

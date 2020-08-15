@@ -41,7 +41,7 @@
 				<div class="row">
 					<div class="col-md-6 col-sm-6 col-6 col-lg-2">
 						<div class="logo">
-							<a href="{% url 'Reading:home' %}">
+							<a href="{% url 'home' %}">
 								<img src="{% static 'Reading/images/logo/logo.png' %}" alt="logo images">
 							</a>
 						</div>
@@ -49,7 +49,7 @@
 					<div class="col-lg-8 d-none d-lg-block">
 						<nav class="mainmenu__nav">
 							<ul class="meninmenu d-flex justify-content-start">
-								<li class="drop with--one--item"><a href="{% url 'Reading:home' %}">Home</a></li>
+								<li class="drop with--one--item"><a href="{% url 'home' %}">Home</a></li>
 								<li class="drop"><a href="#">Shop</a>
 									<div class="megamenu mega03">
 										<ul class="item item03">
@@ -304,10 +304,19 @@
 											</div>
 										</div>
 									</div>
+
 								</div>
+
 							</li>
+                            {% if request.user.is_authenticated %}
+                                    <a class="btn btn-dark btn-outline-dark" href="{% url 'logout' %}">Logout</a>
+                                {% else %}
+                                    <a class="btn btn-dark btn-outline-dark" href="{% url 'login' %}">Login</a>
+                                {% endif %}
 						</ul>
+
 					</div>
+
 				</div>
 				<!-- Start Mobile Menu -->
 				<div class="row d-none">
@@ -385,7 +394,7 @@
 							<div class="footer__widget footer__menu">
 								<div class="ft__logo">
 									<a href="index.html">
-										<img src="images/logo/3.png" alt="logo">
+										<img src="{% static 'Reading/images/logo/3.png' %}" alt="logo">
 									</a>
 									<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered duskam alteration variations of passages</p>
 								</div>
