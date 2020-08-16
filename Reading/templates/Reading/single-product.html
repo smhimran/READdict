@@ -82,8 +82,8 @@
         					<div class="row">
         						<div class="col-lg-6 col-12">
         							<div class="wn__fotorama__wrapper">
-	        							<div class="fotorama wn__fotorama__action" data-nav="thumbs">
-		        							  <a href="{{ book.image }}"><img src="{{ book.image }}" alt=""></a>
+	        							<div data-nav="thumbs">
+		        							  <a href="{{ book.image }}"><img src="{{ book.image }}" alt="{{ book.name }}" style="width: 270px;height: 360px;"></a>
 
 	        							</div>
         							</div>
@@ -103,19 +103,43 @@
         								<div class="price-box">
         									<span>{{ book.rating }}</span>
         								</div>
-										<div class="product__overview">
+										<div class="product__overview">Pages
                                             <p>{{ book.summary }}</p>
         								</div>
         								<div class="box-tocart d-flex">
-        									<div class="addtocart__actions">
-        										<button class="tocart" data-toggle="modal" id="startmodButton" data-target="#readingmodal" title="Start Reading">Start Reading</button>
+        									<div class="addtocart__actions" {% if started %} style="display: none" {% else %} style="display: block" {% endif %}>
+        										<button class="tocart" data-toggle="modal" id="startmodButton" data-target="#readingmodal" title="Start Reading" {% if request.user.is_authenticated %} style="display: block" {% else %} style="display: none" {% endif %}>Start Reading</button>
+                                                <a class="btn btn-outline-success" href="{% url 'login' %}" {% if request.user.is_authenticated %} style="display: none" {% else %} style="display: block" {% endif %}>Login to start reading</a>
         									</div>
-                                            <div class="progress" id="progdiv" style="display: none">
-                                                <div class="progress-bar progress-bar-striped active" id="progbar" role="progressbar" style="width:0%">
-                                                  0
-                                                </div>
-                                              </div>
+
+
         								</div>
+                                    <div class="progress" id="progdiv" {% if started %} style="display: block" {% else %} style="display: none" {% endif %}>
+                                             {% if started %}
+                                                <div div class="progress-bar progress-bar-striped active" id="progbar" role="progressbar" aria-valuenow="{{ book.pages }}" aria-valuemin="0" aria-valuemax="100"  style="width:{{ pages|percent:book.id }}%">
+                                                    {{  pages|percent:book.id }}%
+                                                </div>
+                                                {% else %}
+                                            <div div class="progress-bar progress-bar-striped active" id="progbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"  style="width:0.0%">
+                                                    0%
+                                                </div>
+                                             {% endif %}
+                                              </div>
+
+                                    <div class="card" id="recommendDiv" style="display:{% if started %} block {% else %} none {% endif %} ; margin-top: 10px; " >
+                                                <div class="card-body">
+
+                                                    <h6 class="card-text" id="recommendedPage">
+                                                        {% if finished %}
+                                                        You already finished this book.
+                                                            {% else %}
+                                                        You need to read {% recommend pages book.id request.user.id %} pages per day.
+                                                        {% endif %}
+                                                    </h6>
+
+                                                </div>
+                                            </div>
+
 										<div class="product_meta">
 											<span class="posted_in">Categories:
                                                 {% for category in book.category.all %}
@@ -154,6 +178,19 @@
 									<div class="description__attribute">
                                         <p>{{ book.summary }}</p>
 									</div>
+
+                                        <div class="card" id="pageCounter" {% if started %} style="display: block" {% else %} style="display: none" {% endif %}>
+                                            <div class="card-header">
+                                                <h3 class="card-header-title">How many pages have you read today?</h3>
+                                            </div>
+                                            <div class="card-body">
+                                                <form class="form-inline">
+                                                    <input type="number" id="pageNumber" class="form-control" placeholder="0"> &nbsp; Pages &nbsp;
+                                                    <button type="button" id="pageButton" class="btn btn-primary" value="Submit">Submit</button>
+                                                </form>
+                                            </div>
+                                        </div>
+
 	                        	</div>
 	                        	<!-- End Single Tab Content -->
 	                        	<!-- Start Single Tab Content -->
@@ -367,7 +404,6 @@
     let date = $('#targetdate').val();
     let user = {{ request.user.id }};
     let book = {{ book.id }};
-    console.log(date);
     let data = {target: date, user:user, book: book}
     $.ajax({
         type: 'POST',
@@ -378,14 +414,55 @@
             let progress = response['progress'];
             let pages = {{ book.pages }};
             let percent = (progress/pages) * 100.0;
+            let days = response["days"];
+            let recommend = Math.ceil((pages - progress)/days);
             $('#progbar').css('width', percent+'%');
             $('#progbar').html(progress+' pages read');
             $('#progdiv').css('display', 'block');
             $('#startmodButton').css('display', 'none');
             $('#readingmodal').modal('toggle');
+            $('#pageCounter').css('display', 'block');
+            $('#recommendDiv').css('display', 'block');
+            $('#recommendedPage').html('You need to read '+ recommend +' pages per day');
         }
     })
 })
 
 </script>
+
+<script>
+$(document).on('click', '#pageButton', function (e) {
+    let pages = $('#pageNumber').val();
+    let user = {{ request.user.id }};
+    let book = {{ book.id }};
+    let data = {pages: pages, user:user, book: book};
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'Reading:increase_page_count' %}",
+        data: data,
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        success: function (response) {
+            let pages = response["pages"];
+            let total = response["total"];
+            let days = response["days"];
+            let recommend = Math.ceil((total - pages)/days)
+            let percent = (pages/total) * 100.0;
+            if (percent > 100) {
+                percent = 100;
+            }
+            console.log(percent)
+            $('#progbar').css('width', percent+'%').attr('aria-valuenow', percent);
+            $('#progbar').html(Math.round(percent)+'%');
+            $('#pageNumber').val('');
+            if (percent == 100) {
+                $('#recommendedPage').html('<strong>Congratulations!</strong> You completed this book!');
+            }
+            else {
+                $('#recommendedPage').html('You need to read ' + recommend + ' pages per day');
+            }
+        }
+    })
+})
+</script>
+
 {% endblock %}

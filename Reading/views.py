@@ -5,6 +5,7 @@ from .models import Book, Category, Profile, Read
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
+import datetime
 
 # Create your views here.
 def index(request):
@@ -27,9 +28,17 @@ def single_book(request, id):
         categories = Category.objects.all()
         return render(request, 'Reading/error404.html', {'categories': categories})
     book = Book.objects.get(id=id)
+    pages = 0
+    finished = False
+    started = Read.objects.filter(book_id=id, user_id=request.user.id).exists()
+    if started:
+        read = Read.objects.get(book_id=id, user_id=request.user.id)
+        pages = read.progress
+        if pages >= book.pages:
+            finished = True
     categories = Category.objects.all()
     recents = Book.objects.order_by('-id')[:3]
-    return render(request, 'Reading/single-product.html', {'book': book, 'categories': categories, 'recents': recents})
+    return render(request, 'Reading/single-product.html', {'book': book, 'categories': categories, 'recents': recents, 'started': started, 'pages': pages, 'finished': finished})
 
 def user_login(request):
     if request.method == 'GET':
@@ -55,6 +64,26 @@ def user_login(request):
                 'msg': msg
             }
             return JsonResponse(data)
+@login_required
+def increase_page_count(request):
+    pages = request.POST.get('pages')
+    user = request.POST.get('user')
+    book = request.POST.get('book')
+    read = Read.objects.get(book_id=book, user_id=user)
+    total = Book.objects.get(id=book).pages
+    pages = int(pages)
+    pages += read.progress
+    days = (read.target - datetime.date.today()).days
+    if pages > total:
+        pages = total
+    read.progress = pages
+    read.save()
+    data = {
+        'pages': pages,
+        'total': total,
+        'days': days
+    }
+    return JsonResponse(data)
 
 def check_user(request):
     email = request.GET.get('email', None)
@@ -126,9 +155,13 @@ def start_reading(request):
     book = request.POST.get('book')
     target = request.POST.get('target')
     print('{} {} {}'.format(user, book, target))
-    read = Read.objects.create(user_id=user, book_id=book, target=target)
+    target_date = datetime.datetime.strptime(target, '%Y-%m-%d').date()
+    read = Read.objects.create(user_id=user, book_id=book, target=target_date)
+
+    days = (target_date - datetime.date.today()).days
     data = {
-        'progress': read.progress
+        'progress': read.progress,
+        'days': days
     }
     return JsonResponse(data)
 
