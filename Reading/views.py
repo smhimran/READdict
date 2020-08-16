@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from .models import Book, Category, Profile
+from .models import Book, Category, Profile, Read
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.http import HttpResponseRedirect, JsonResponse
@@ -118,6 +118,18 @@ def signup(request):
         'msg': msg
     }
 
+    return JsonResponse(data)
+
+@login_required
+def start_reading(request):
+    user = request.POST.get('user')
+    book = request.POST.get('book')
+    target = request.POST.get('target')
+    print('{} {} {}'.format(user, book, target))
+    read = Read.objects.create(user_id=user, book_id=book, target=target)
+    data = {
+        'progress': read.progress
+    }
     return JsonResponse(data)
 
 @login_required

@@ -2,8 +2,59 @@
 {% load static %}
 {% load Reading_tags %}
 
+{% block title %}
+<title>{{ book.name }} | READdict</title>
+{% endblock %}
+
 {% block body %}
-		<!-- End Search Popup -->
+		<div class="modal fade" id="readingmodal" tabindex="-1" role="dialog"
+                                         aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header no-bd">
+                                                    <h5 class="modal-title">
+                                                        <span class="fw-light">
+                                                        {{ book.name }}
+                                                    </span>
+                                                    </h5>
+                                                    <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p class="small">Please set your target date, when you want to finish the book</p>
+                                                    <form method="POST" enctype="multipart/form-data">
+                                                        {% csrf_token %}
+                                                        <div class="row">
+                                                            <div class="col-sm-12">
+                                                                <div class="form-group form-group-default">
+                                                                    <label>Target Date</label>
+                                                                    <input id="targetdate" type="date"
+                                                                           class="form-control"
+                                                                           name="target">
+                                                                    <div id="datepassed" style="display: none">
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="modal-footer no-bd">
+                                                            <button type="button" id="StartButton"
+                                                                    class="btn btn-primary">
+                                                                Start Reading
+                                                            </button>
+                                                            <button type="button" class="btn btn-danger"
+                                                                    data-dismiss="modal">
+                                                                Cancel
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
         <!-- Start Bradcaump area -->
         <div class="ht__bradcaump__area bg-image--4">
             <div class="container">
@@ -32,7 +83,7 @@
         						<div class="col-lg-6 col-12">
         							<div class="wn__fotorama__wrapper">
 	        							<div class="fotorama wn__fotorama__action" data-nav="thumbs">
-		        							  <a href="1.jpg"><img src="{{ book.image }}" alt=""></a>
+		        							  <a href="{{ book.image }}"><img src="{{ book.image }}" alt=""></a>
 
 	        							</div>
         							</div>
@@ -57,8 +108,13 @@
         								</div>
         								<div class="box-tocart d-flex">
         									<div class="addtocart__actions">
-        										<button class="tocart" type="submit" title="Add to Cart">Start Reading</button>
+        										<button class="tocart" data-toggle="modal" id="startmodButton" data-target="#readingmodal" title="Start Reading">Start Reading</button>
         									</div>
+                                            <div class="progress" id="progdiv" style="display: none">
+                                                <div class="progress-bar progress-bar-striped active" id="progbar" role="progressbar" style="width:0%">
+                                                  0
+                                                </div>
+                                              </div>
         								</div>
 										<div class="product_meta">
 											<span class="posted_in">Categories:
@@ -302,3 +358,34 @@
 
 
  {% endblock %}
+
+{% block scripts %}
+<script>
+
+    $(document).on('click', '#StartButton', function (e) {
+    e.preventDefault();
+    let date = $('#targetdate').val();
+    let user = {{ request.user.id }};
+    let book = {{ book.id }};
+    console.log(date);
+    let data = {target: date, user:user, book: book}
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'Reading:start_reading' %}",
+        data: data,
+        headers: {'X-CSRFToken': '{{ csrf_token }}'},
+        success: function (response) {
+            let progress = response['progress'];
+            let pages = {{ book.pages }};
+            let percent = (progress/pages) * 100.0;
+            $('#progbar').css('width', percent+'%');
+            $('#progbar').html(progress+' pages read');
+            $('#progdiv').css('display', 'block');
+            $('#startmodButton').css('display', 'none');
+            $('#readingmodal').modal('toggle');
+        }
+    })
+})
+
+</script>
+{% endblock %}

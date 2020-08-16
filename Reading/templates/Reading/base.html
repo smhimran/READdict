@@ -4,7 +4,9 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
-	<title>Home | Bookshop Responsive Bootstrap4 Template</title>
+    {% block title %}
+	<title>READdict | Your book reading tracker</title>
+    {% endblock %}
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -27,6 +29,7 @@
 
 	<!-- Modernizer js -->
 	<script src="{% static 'Reading/js/vendor/modernizr-3.5.0.min.js' %}"></script>
+    <script src="{% static 'Reading/js/vendor/jquery-3.2.1.min.js' %}"></script>
 </head>
 <body>
 	<!--[if lte IE 9]>
@@ -531,6 +534,10 @@
 	<script src="{% static 'Reading/js/bootstrap.min.js' %}"></script>
 	<script src="{% static 'Reading/js/plugins.js' %}"></script>
 	<script src="{% static 'Reading/js/active.js' %}"></script>
+
+    {% block scripts %}
+
+    {% endblock %}
 
 </body>
 </html>
