@@ -56,16 +56,16 @@
                                         </div>
                                     </div>
         <!-- Start Bradcaump area -->
-        <div class="ht__bradcaump__area bg-image--4">
+        <div class="ht__bradcaump__area bg-image--4" style="background-image: url('https://i.ibb.co/9q2NgKH/wp2297952-reading-books-wallpapers.jpg')">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="bradcaump__inner text-center">
-                        	<h2 class="bradcaump-title">Shop Single</h2>
+                        	<h2 class="bradcaump-title">{{ book.name }}</h2>
                             <nav class="bradcaump-content">
                               <a class="breadcrumb_item" href="index.html">Home</a>
                               <span class="brd-separetor">/</span>
-                              <span class="breadcrumb_item active">Shop Single</span>
+                              <span class="breadcrumb_item active" style="background: rgba(0, 0, 0, 0.5); color: #ffffff">{{ book.name }}</span>
                             </nav>
                         </div>
                     </div>
@@ -109,7 +109,7 @@
         								<div class="box-tocart d-flex">
         									<div class="addtocart__actions" {% if started %} style="display: none" {% else %} style="display: block" {% endif %}>
         										<button class="tocart" data-toggle="modal" id="startmodButton" data-target="#readingmodal" title="Start Reading" {% if request.user.is_authenticated %} style="display: block" {% else %} style="display: none" {% endif %}>Start Reading</button>
-                                                <a class="btn btn-outline-success" href="{% url 'login' %}" {% if request.user.is_authenticated %} style="display: none" {% else %} style="display: block" {% endif %}>Login to start reading</a>
+                                                <a class="btn btn-outline-successsmhi" href="{% url 'login' %}" {% if request.user.is_authenticated %} style="display: none" {% else %} style="display: block" {% endif %}>Login to start reading</a>
         									</div>
 
 
