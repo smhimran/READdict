@@ -64,6 +64,8 @@ def user_login(request):
                 'msg': msg
             }
             return JsonResponse(data)
+
+
 @login_required
 def increase_page_count(request):
     pages = request.POST.get('pages')
