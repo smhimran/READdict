@@ -167,6 +167,7 @@ def start_reading(request):
     }
     return JsonResponse(data)
 
+
 @login_required
 def user_profile(request):
     if request.user.is_authenticated:
@@ -177,6 +178,7 @@ def user_profile(request):
     else:
         categories = Category.objects.all()
         return render(request, 'Reading/error404.html', {'categories': categories})
+
 
 @login_required
 def user_logout(request):
